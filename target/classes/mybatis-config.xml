@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <!-- <settings>
+        <setting name="logImpl" value="SLF4J"/>
+        &lt;!&ndash;<setting name="cacheEnabled" value="true" />&ndash;&gt;
+    </settings>-->
+    <!--<plugins>-->
+        <!--<plugin interceptor="com.gupaoedu.mybatis.plugins.TestPlugin">-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+    <typeHandlers>
+        <typeHandler handler="com.lwh.typehandlers.TestTypeHandler"></typeHandler>
+    </typeHandlers>
+    <plugins>
+        <plugin interceptor="com.lwh.plugins.TestPlugin">
+            <property name="someProperty" value="100"/>
+        </plugin>
+    </plugins>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/will_test?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+                <property name="username" value="root"/>
+                <property name="password" value="654321"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="mappers/TestMapper.xml"/>
+        <mapper resource="mappers/UserDaoMapper.xml"/>
+        <mapper resource="mappers/UserMapper.xml"/>
+    </mappers>
+
+</configuration>

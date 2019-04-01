@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="userDao">
+    <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
+       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
+     -->
+    <select id="queryUserById" resultType="com.lwh.demo.User">
+      select t.id,t.user_name as userName,t.create_date as createDate,t.update_date
+      as updateDate,t.name,t.password from t_user t where id = #{id}
+   </select>
+
+    <select id="queryUserAll" resultType="com.lwh.demo.User">
+        select t.id, t.user_name as userName,t.create_date as createDate,t.update_date
+      as updateDate,t.name,t.password from t_user t;
+    </select>
+    <insert id="insertUser" parameterType="com.lwh.demo.User">
+        insert into t_user(user_name,password,name,create_date,update_date)values (
+        #{userName},#{password},#{name,typeHandler=com.lwh.typehandlers.TestTypeHandler},now(),now()
+        );
+    </insert>
+
+    <update id="updateUser" parameterType="com.lwh.demo.User">
+        update t_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userName!=null">user_name = #{userName},</if>
+            <if test="password!=null">password = #{password},</if>
+            <if test="name!=null">name = #{name},</if>
+            update_Date = now(),
+        </trim>
+    </update>
+
+    <delete id="deleteUser">
+        delete from t_user where id=#{id}
+    </delete>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.lwh.mapper.UserMapper">
+    <resultMap id="user" type="com.lwh.demo.User">
+        <id column="id" jdbcType="BIGINT" property="id"></id>
+        <result column="userName" jdbcType="VARCHAR" property="user_name"></result>
+        <result column="name" jdbcType="VARCHAR" property="name"></result>
+        <result column="password" jdbcType="VARCHAR" property="password"></result>
+        <result column="createDate" jdbcType="TIMESTAMP" property="create_date"></result>
+        <result column="updateDate" jdbcType="TIMESTAMP" property="update_date"></result>
+    </resultMap>
+    <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
+       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
+     -->
+    <select id="queryUserById" resultType="com.lwh.demo.User" resultMap="user">
+      select * from t_user t where id = #{id}
+   </select>
+
+    <select id="queryUserByTableName" resultType="com.lwh.demo.User" resultMap="user">
+        select * from ${tableName}
+    </select>
+
+    <select id="queryUserAll" resultType="com.lwh.demo.User" resultMap="user">
+        select * from t_user t;
+    </select>
+    <insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.lwh.demo.User">
+        insert into t_user(user_name,password,name,create_date,update_date)values (
+        #{userName},#{password},#{name,jdbcType=VARCHAR,typeHandler=com.lwh.typehandlers.TestTypeHandler},now(),now()
+        );
+    </insert>
+
+    <update id="updateUser" parameterType="com.lwh.demo.User">
+        update t_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userName!=null">user_name = #{userName},</if>
+            <if test="password!=null">password = #{password},</if>
+            <if test="name!=null">name = #{name},</if>
+            update_Date = now(),
+        </trim>
+    </update>
+
+    <delete id="deleteUserById">
+        delete from t_user where id=#{id}
+    </delete>
+
+    <insert id="insertBatch" parameterType="list">
+        insert into t_user(user_name,password,name,create_date,update_date)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userName},#{item.password},#{item.name,jdbcType=VARCHAR,typeHandler=com.lwh.typehandlers.TestTypeHandler},now(),now())
+        </foreach>
+
+    </insert>
+</mapper>
